@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/bootstrap.css">
+    <title>no-templates</title>
+    <style>
+        body {
+            padding: 20px;
+        }
+    </style>
+</head>
+
+<body>
+<div class="container">
+    <h1>no-templates</h1>
+
+    <div class="mb-3">
+        <label for="base64Input" class="form-label">Base64 序列化数据</label>
+        <textarea class="form-control" id="base64Input" rows="5"></textarea>
+    </div>
+
+    <button type="button" class="btn btn-primary" onclick="submitBase64()">提交</button>
+    <button type="button" class="btn btn-primary" onclick="submitBase64()">提交</button>
+</div>
+
+<div class="toast-container position-absolute bottom-0 end-0 p-3">
+    <div id="responseToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+            <strong class="me-auto">响应</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body">
+            <span id="responseText"></span>
+        </div>
+    </div>
+</div>
+
+<script src="/bootstrap.js"></script>
+<script>
+    function submitBase64() {
+        const base64Input = document.getElementById("base64Input").value;
+
+        fetch("/demo", {
+            method: "POST",
+            body: base64Input
+        })
+            .then(response => response.text())
+            .then(data => {
+                const responseText = document.getElementById("responseText");
+                responseText.textContent = data;
+                const responseToast = new bootstrap.Toast(document.getElementById("responseToast"));
+                responseToast.show();
+            })
+            .catch(error => console.error(error));
+    }
+</script>
+</body>
+
+</html>
