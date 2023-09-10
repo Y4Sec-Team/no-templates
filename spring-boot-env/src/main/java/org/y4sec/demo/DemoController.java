@@ -14,6 +14,7 @@ import java.util.List;
 @SuppressWarnings("all")
 public class DemoController {
     private static final List<Object> BLACKLIST = Arrays.asList(
+            "java.security.SignedObject",
             "com.sun.org.apache.xalan.internal.xsltc.runtime.AbstractTranslet",
             "com.sun.org.apache.xalan.internal.xsltc.trax.TemplatesImpl",
             "com.sun.org.apache.xalan.internal.xsltc.trax.TrAXFilter");
@@ -26,11 +27,9 @@ public class DemoController {
             ByteArrayInputStream bin = new ByteArrayInputStream(serData);
             ObjectInputStream ois = new ObjectInputStream(bin) {
                 @Override
-                protected Class<?> resolveClass(ObjectStreamClass desc)
-                        throws IOException, ClassNotFoundException {
+                protected Class<?> resolveClass(ObjectStreamClass desc) throws IOException, ClassNotFoundException {
                     if (BLACKLIST.contains(desc.getName())) {
-                        throw new InvalidClassException(
-                                "the class " + desc.getName() + " is on the blacklist");
+                        throw new InvalidClassException("the class " + desc.getName() + " is on the blacklist");
                     } else {
                         return super.resolveClass(desc);
                     }
